@@ -10,13 +10,13 @@
     ],
     "license" : "MIT",
     "require": {
-        "php": ">=5.5.9",
-        "illuminate/support": "4.*",
-        "illuminate/database": "4.*",
+        "php": ">=7.1",
+        "illuminate/support": ">=5.7",
+        "illuminate/database": ">=5.7",
         "pxlcore/sql-anywhere-client": "dev-master"
     },
     "require-dev": {
-        "orchestra/testbench": "2.1.*",
+        "orchestra/testbench": "3.7.*",
         "mockery/mockery": "*"
     },
     "autoload": {
