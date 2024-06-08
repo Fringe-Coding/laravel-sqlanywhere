@@ -18,7 +18,7 @@ class SQLAnywhereSchemaGrammar extends Grammar {
 	 *
 	 * @var array
 	 */
-	protected $modifiers = array('Unsigned', 'Nullable', 'Default', 'Increment');
+	protected $modifiers = array('Nullable', 'Default', 'Increment');
 
 	/**
 	 * Compile the query to determine if a table exists.
@@ -257,6 +257,17 @@ class SQLAnywhereSchemaGrammar extends Grammar {
 	}
 
 	/**
+	 * Create the column definition for a big integer type.
+	 *
+	 * @param  Illuminate\Support\Fluent  $column
+	 * @return string
+	 */
+	protected function typeBigInteger(Fluent $column)
+	{
+		return 'bigint';
+	}
+
+	/**
 	 * Create the column definition for a float type.
 	 *
 	 * @param  Illuminate\Support\Fluent  $column
@@ -264,7 +275,7 @@ class SQLAnywhereSchemaGrammar extends Grammar {
 	 */
 	protected function typeFloat(Fluent $column)
 	{
-		return "float({$column->total}, {$column->places})";
+		return "real";
 	}
 
 	/**
@@ -408,7 +419,7 @@ class SQLAnywhereSchemaGrammar extends Grammar {
 	{
 		if ($column->type == 'integer' and $column->autoIncrement)
 		{
-			return ' auto_increment primary key';
+			return ' default autoincrement primary key';
 		}
 	}
 
