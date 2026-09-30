@@ -63,6 +63,37 @@ class SQLAnywhereConnection extends Connection {
 	}
 
 	/**
+	 * Stream a select query without Laravel's PDOStatement-only prepared() method.
+	 *
+	 * @param  string  $query
+	 * @param  array   $bindings
+	 * @param  bool    $useReadPdo
+	 * @return \Generator
+	 */
+	public function cursor($query, $bindings = array(), $useReadPdo = true)
+	{
+		$statement = $this->run($query, $bindings, function($query, $bindings) use ($useReadPdo)
+		{
+			if ($this->pretending()) return null;
+
+			$statement = $this->getPdoForSelect($useReadPdo)->prepare($query);
+			$statement->execute($this->prepareBindings($bindings));
+
+			return $statement;
+		});
+
+		if ($statement === null) return;
+
+		try {
+			while ($record = $statement->fetch()) {
+				yield $record;
+			}
+		} finally {
+			$statement->freeResults();
+		}
+	}
+
+	/**
 	 * Run an SQL statement and get the number of rows affected.
 	 *
 	 * @param  string  $query
